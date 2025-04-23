@@ -25,8 +25,11 @@ while True:
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Detect faces in the image
-    faces = f_cascade.detectMultiScale(gray, 1.3, 5)
+    faces = f_cascade.detectMultiScale(gray, 1.1, 4)
     for (x, y, w, h) in faces:
+        # Uncomment the following line to draw rectangles around the faces
+        # cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
         # Extract the face region from the grayscale and color images
         roi_gray = gray[y:y + h, x:x + w]
         roi_color = img[y:y + h, x:x + w]
@@ -37,6 +40,9 @@ while True:
 
         # Calculate the center of each eye and store the coordinates in the list
         for (ex, ey, ew, eh) in eyes:
+            # Uncomment the following line to draw rectangles around the eyes
+            # cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (255, 0, 0), 2)
+
             eye_center_x = x + ex + (ew // 2)
             eye_center_y = y + ey + (eh // 2)
             eye_centers.append((eye_center_x, eye_center_y))
