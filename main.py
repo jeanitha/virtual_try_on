@@ -68,7 +68,7 @@ while True:
             scale_factor = min(scale_factor_x, scale_factor_y)
 
             # Resize the sunglasses while maintaining the original aspect ratio
-            scaled_sunglasses = cv2.resize(sunglasses, (0, 0), fx=scale_factor, fy=scale_factor)
+            scaled_sunglasses = cv2.resize(sunglasses, (0, 0), fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_CUBIC)
 
             # Calculate the top-left coordinates of the sunglasses to be centered between the eyes
             sunglasses_x = avg_eye_center_x - scaled_sunglasses.shape[1] // 2
