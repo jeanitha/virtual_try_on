@@ -17,6 +17,25 @@ if sunglasses.shape[2] == 3:  # If there are only 3 channels (BGR)
 # Open the webcam
 cap = cv2.VideoCapture(0)
 
+def rotate_image(image, angle):
+  image_center = tuple(np.array(image.shape[1::-1]) / 2)
+  rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
+  result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
+  return result
+
+def calculate_angle(x1, y1, x2, y2):
+    delta_x = x1 - x2
+    delta_y = y1 - y2
+
+    angle_radians = np.arctan(delta_y / delta_x)   
+          
+    angle_degrees = (angle_radians * 180) / np.pi  
+
+    if angle_degrees > 0:
+        return -abs(angle_degrees)
+
+    return abs(angle_degrees)
+
 while True:
     ret, img = cap.read()
     if not ret:
@@ -80,6 +99,8 @@ while True:
                 sunglasses_x = x
                 sunglasses_y = y
 
+            angle = calculate_angle(eye_centers[0][0], eye_centers[0][1], eye_centers[1][0], eye_centers[1][1])
+            scaled_sunglasses = rotate_image(scaled_sunglasses, angle)
             for c in range(3):
                 img[sunglasses_y:sunglasses_y + scaled_sunglasses.shape[0],
                     sunglasses_x:sunglasses_x + scaled_sunglasses.shape[1], c] = (
